@@ -161,6 +161,26 @@ export default combineReducers( {
 } );
 
 /**
+ * Figures out the REST API URL for a given post type
+ * @param  {string} postType the post type
+ * @return {string}          A URL to make a REST request to
+ */
+function getURLForType(postType) {
+	let url = '';
+	switch (postType) {
+		case 'post':
+			url = '/wp/v2/posts';
+			break;
+		case 'page':
+			url = '/wp/v2/pages';
+			break;
+		default:
+			url = '/wp/v2/' + postType;
+	}
+	return url;
+}
+
+/**
  * Triggers a network request to fetch posts for the specified site and query.
  *
  * @param  {String}   query  Post query
@@ -168,6 +188,10 @@ export default combineReducers( {
  */
 export function requestPosts( query = {} ) {
 	return ( dispatch ) => {
+		const defaults = {
+			post_type: post
+		}
+		query = { ...defaults, ...query,  };
 		dispatch( {
 			type: POSTS_REQUEST,
 			query,
@@ -175,12 +199,14 @@ export function requestPosts( query = {} ) {
 
 		query._embed = true;
 
-		api.get( '/wp/v2/posts', query ).then( posts => {
+		const url = getURLForType( query.post_type );
+
+		api.get( url, query ).then( posts => {
 			dispatch( {
 				type: POSTS_RECEIVE,
 				posts,
 			} );
-			requestPageCount( '/wp/v2/posts', query ).then( count => {
+			requestPageCount( url, query ).then( count => {
 				dispatch( {
 					type: POSTS_REQUEST_SUCCESS,
 					query,
@@ -203,9 +229,10 @@ export function requestPosts( query = {} ) {
  * Triggers a network request to fetch a specific post from a site.
  *
  * @param  {string}   postSlug  Post slug
+ * @param  {string}   postType  Post type
  * @return {Function}           Action thunk
  */
-export function requestPost( postSlug ) {
+export function requestPost( postSlug, postType = 'post' ) {
 	return ( dispatch ) => {
 		dispatch( {
 			type: POST_REQUEST,
@@ -217,7 +244,9 @@ export function requestPost( postSlug ) {
 			_embed: true,
 		};
 
-		api.get( '/wp/v2/posts', query ).then( data => {
+		const url = getURLForType( postType );
+
+		api.get( url, query ).then( data => {
 			const post = data[ 0 ];
 			dispatch( {
 				type: POSTS_RECEIVE,
