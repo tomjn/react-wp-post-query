@@ -16,7 +16,7 @@ import { requestPosts, requestPost } from './state';
 
 const debug = debugFactory( 'query:post' );
 
-class QueryPosts extends Component {
+class WPPostQuery extends Component {
 	componentWillMount() {
 		this.request( this.props );
 	}
@@ -51,14 +51,14 @@ class QueryPosts extends Component {
 	}
 }
 
-QueryPosts.propTypes = {
+WPPostQuery.propTypes = {
 	postSlug: PropTypes.string,
 	query: PropTypes.object,
 	requestingPosts: PropTypes.bool,
 	requestPosts: PropTypes.func,
 };
 
-QueryPosts.defaultProps = {
+WPPostQuery.defaultProps = {
 	requestPosts: () => {},
 };
 
@@ -79,4 +79,4 @@ export default connect(
 			dispatch,
 		);
 	},
-)( QueryPosts );
+)( WPPostQuery );
