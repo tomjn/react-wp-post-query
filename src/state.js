@@ -189,7 +189,7 @@ function getURLForType(postType) {
 export function requestPosts( query = {} ) {
 	return ( dispatch ) => {
 		const defaults = {
-			post_type: post
+			post_type: 'post'
 		}
 		query = { ...defaults, ...query,  };
 		dispatch( {
