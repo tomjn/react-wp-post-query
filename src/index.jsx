@@ -42,7 +42,7 @@ class WPPostQuery extends Component {
 
 		if ( single && ! props.requestingPost ) {
 			debug( `Request single post ${ props.postSlug }` );
-			props.requestPost( props.postSlug );
+			props.requestPost( props.postSlug, props.postType );
 		}
 	}
 
@@ -60,6 +60,7 @@ WPPostQuery.propTypes = {
 
 WPPostQuery.defaultProps = {
 	requestPosts: () => {},
+	postType: 'post'
 };
 
 export default connect(

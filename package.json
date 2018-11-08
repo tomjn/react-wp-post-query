@@ -1,6 +1,6 @@
 {
   "name": "react-wp-post-query",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "A component for fetching WordPress custom post data from the REST API.",
   "repository": {
     "type": "git",
